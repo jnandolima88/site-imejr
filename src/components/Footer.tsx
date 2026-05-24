@@ -1,0 +1,143 @@
+"use client";
+
+import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+import Image from "next/image";
+
+const socials = [
+  { icon: Facebook, href: "https://facebook.com/IMEJuniorUSP", label: "Facebook" },
+  { icon: Instagram, href: "https://www.instagram.com/imejr.usp/", label: "Instagram" },
+  { icon: Linkedin, href: "https://br.linkedin.com/company/imejr", label: "LinkedIn" },
+  { icon: Youtube, href: "#", label: "YouTube" },
+];
+
+const navLinks = [
+  { label: "Quem Somos", href: "#sobre" },
+  { label: "Computação", href: "#servicos" },
+  { label: "Análise de Dados", href: "#servicos" },
+  { label: "Educação", href: "#servicos" },
+  { label: "Atividades", href: "#atividades" },
+  { label: "Contato", href: "#contato" },
+];
+
+export default function Footer() {
+  return (
+    <footer style={{ background: "#000000", borderTop: "1px solid #1A1A1A" }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-12">
+          {/* Brand */}
+          <div>
+            <div className="flex items-center gap-3 mb-5">
+              <Image
+                src="/logo.png"
+                alt="IME Jr"
+                width={100}
+                height={40}
+                className="h-9 w-auto object-contain"
+              />
+              <span className="font-black text-white text-md tracking-tight">
+                IME Jr
+              </span>
+            </div>
+            <p className="text-sm leading-relaxed mb-6" style={{ color: "#5E5E5E" }}>
+              Empresa Júnior do Instituto de Matemática e Estatística da
+              Universidade de São Paulo.
+            </p>
+            <div className="flex gap-3">
+              {socials.map(({ icon: Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200"
+                  style={{ background: "#1A1A1A", color: "#5E5E5E" }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background = "#FFDA33";
+                    e.currentTarget.style.color = "#101010";
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background = "#1A1A1A";
+                    e.currentTarget.style.color = "#5E5E5E";
+                  }}
+                >
+                  <Icon size={15} />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Nav */}
+          <div>
+            <h4 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: "#3E3E3E" }}>
+              Navegação
+            </h4>
+            <ul className="space-y-2.5">
+              {navLinks.map((l) => (
+                <li key={l.label}>
+                  <a
+                    href={l.href}
+                    className="text-sm transition-colors"
+                    style={{ color: "#5E5E5E" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#5E5E5E")}
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: "#3E3E3E" }}>
+              Contatos
+            </h4>
+            <div className="space-y-2.5 text-sm" style={{ color: "#5E5E5E" }}>
+              <p>
+                <a
+                  href="mailto:contato@imejr.com"
+                  className="transition-colors"
+                  onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#5E5E5E")}
+                >
+                  contato@imejr.com
+                </a>
+              </p>
+              <p>
+                <a
+                  href="tel:+551130916241"
+                  className="transition-colors"
+                  onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "#5E5E5E")}
+                >
+                  +55 11 3091-6241
+                </a>
+              </p>
+              <p className="leading-relaxed">
+                R. do Matão, 1010<br />
+                Cidade Universitária<br />
+                São Paulo, SP
+              </p>
+              <p style={{ color: "#3E3E3E" }}>CNPJ: 26.531.013/0001-80</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom */}
+        <div
+          className="mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-3"
+          style={{ borderTop: "1px solid #1A1A1A" }}
+        >
+          <p className="text-xs" style={{ color: "#3E3E3E" }}>
+            Todos os direitos reservados © Empresa Júnior de Informática, Matemática e Estatística, 2026
+          </p>
+          <p className="text-xs" style={{ color: "#2E2E2E" }}>
+            #VemSerGigante
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
