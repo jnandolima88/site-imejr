@@ -99,4 +99,4 @@ Depois substitua os arquivos no `public_html` da Hostinger.
 
 ---
 
-[IME Jr](https://imejr.com.br) · [Instagram](https://www.instagram.com/imejr.usp/) · [LinkedIn](https://br.linkedin.com/company/imejr)
+[IME Jr](https://imejr.com) · [Instagram](https://www.instagram.com/imejr.usp/) · [LinkedIn](https://br.linkedin.com/company/imejr)
