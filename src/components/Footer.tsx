@@ -7,16 +7,16 @@ const socials = [
   { icon: Facebook, href: "https://facebook.com/IMEJuniorUSP", label: "Facebook" },
   { icon: Instagram, href: "https://www.instagram.com/imejr.usp/", label: "Instagram" },
   { icon: Linkedin, href: "https://br.linkedin.com/company/imejr", label: "LinkedIn" },
-  { icon: Youtube, href: "#", label: "YouTube" },
+  { icon: Youtube, href: "https://www.youtube.com/channel/UCc4ePc_uJuRT-4ZtZCG-xPw", label: "YouTube" },
 ];
 
 const navLinks = [
-  { label: "Quem Somos", href: "#sobre" },
-  { label: "Computação", href: "#servicos" },
-  { label: "Análise de Dados", href: "#servicos" },
-  { label: "Educação", href: "#servicos" },
-  { label: "Atividades", href: "#atividades" },
-  { label: "Contato", href: "#contato" },
+  { label: "Quem Somos", href: "/#sobre" },
+  { label: "Computação", href: "/servicos/computacao" },
+  { label: "Análise de Dados", href: "/servicos/dados" },
+  { label: "Educação", href: "/servicos/educacao" },
+  { label: "Atividades", href: "/#atividades" },
+  { label: "Contato", href: "/#contato" },
 ];
 
 export default function Footer() {
@@ -97,12 +97,17 @@ export default function Footer() {
             <div className="space-y-2.5 text-sm" style={{ color: "#5E5E5E" }}>
               <p>
                 <a
-                  href="mailto:contato@imejr.com"
-                  className="transition-colors"
+                  href="https://maps.app.goo.gl/RMpqiJx4gpfB848v6"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors inline-block"
+                  style={{ color: "#5E5E5E" }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
                   onMouseLeave={e => (e.currentTarget.style.color = "#5E5E5E")}
                 >
-                  contato@imejr.com
+                  R. do Matão, 1010<br />
+                  Cidade Universitária<br />
+                  São Paulo, SP
                 </a>
               </p>
               <p>
@@ -115,29 +120,23 @@ export default function Footer() {
                   +55 11 3091-6241
                 </a>
               </p>
-              <p className="leading-relaxed">
-                R. do Matão, 1010<br />
-                Cidade Universitária<br />
-                São Paulo, SP
-              </p>
-              <p style={{ color: "#3E3E3E" }}>CNPJ: 26.531.013/0001-80</p>
+              <div className="space-y-2.5 text-sm" style={{ color: "#5E5E5E" }}>
+                <p>
+                  <a
+                    href="mailto:contato@imejr.com"
+                    className="transition-colors"
+                    onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#5E5E5E")}
+                  >
+                    contato@imejr.com
+                  </a>
+                </p>
+                <p style={{ color: "#3E3E3E" }}>CNPJ: 26.531.013/0001-80</p>
+              </div>
             </div>
           </div>
+          </div>
         </div>
-
-        {/* Bottom */}
-        <div
-          className="mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-3"
-          style={{ borderTop: "1px solid #1A1A1A" }}
-        >
-          <p className="text-xs" style={{ color: "#3E3E3E" }}>
-            Todos os direitos reservados © Empresa Júnior de Informática, Matemática e Estatística, 2026
-          </p>
-          <p className="text-xs" style={{ color: "#2E2E2E" }}>
-            #VemSerGigante
-          </p>
-        </div>
-      </div>
     </footer>
   );
 }

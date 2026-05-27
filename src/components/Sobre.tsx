@@ -15,10 +15,7 @@ export default function Sobre() {
               A empresa júnior do IME-USP
             </h2>
             <p className="section-subtitle">
-              Somos alunos de graduação do Instituto de
-              Matemática, Estatística e Ciência da Computação da Universidade de São Paulo. Aplicamos
-              na prática os conhecimentos adquiridos em sala de aula, com
-              supervisão de professores do IME.
+              Somos estudantes de graduação da Universidade de São Paulo. Combinamos formação técnica rigorosa, tecnologias atuais e contato com pesquisas recentes para desenvolver soluções práticas, sempre com orientação de professores e especialistas de referência em suas áreas.
             </p>
             <p
               className="mt-4 text-base leading-relaxed"
@@ -53,10 +50,10 @@ export default function Sobre() {
           {/* Right: numbers */}
           <div className="grid grid-cols-2 gap-px" style={{ background: "#2E2E2E" }}>
             {[
-              { end: 3,   suffix: "",  label: "áreas de atuação"  },
-              { end: 30,  suffix: "+", label: "anos de história"   },
+              { end: 3, suffix: "", label: "áreas de atuação" },
+              { end: 30, suffix: "+", label: "anos de história" },
               { end: 100, suffix: "+", label: "projetos entregues" },
-              { end: 50,  suffix: "+", label: "membros do IME"     },
+              { end: 50, suffix: "+", label: "membros do IME" },
             ].map((s) => (
               <div
                 key={s.label}

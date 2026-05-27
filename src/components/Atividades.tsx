@@ -1,36 +1,122 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import { Activity } from "@/data/activities";
 
-const activities = [
-  {
-    date: "12 MAI",
-    area: "Dados",
-    areaColor: "#FFDA33",
-    title: "Trilha de Análise de Dados",
-    description: "Introdução ao R, estatística básica e distribuições — primeiros passos do núcleo de Dados.",
-    href: "https://www.linkedin.com/feed/update/urn:li:activity:7460072373791145984",
-  },
-  {
-    date: "08 MAI",
-    area: "Computação",
-    areaColor: "#357DED",
-    title: "Curso: HTML do Zero",
-    description: "Trilha de programação web do núcleo de Computação — Aula 1 disponível no YouTube da IME Jr.",
-    href: "https://www.linkedin.com/feed/update/urn:li:activity:7452126859275755520",
-  },
-  {
-    date: "20 ABR",
-    area: "PS 2026.1",
-    areaColor: "#FFDA33",
-    title: "Seleção — Estudos de Caso",
-    description: "Análise de queda de engajamento em plataforma de streaming de áudio — quatro abordagens, quatro equipes.",
-    href: "https://www.linkedin.com/feed/update/urn:li:activity:7452126859275755520",
-  },
-];
+type SupabaseActivity = {
+  id: string | number;
+  data: string;
+  area: string;
+  titulo: string;
+  descricao: string;
+  link: string;
+};
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey =
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+async function fetchActivities(): Promise<Activity[]> {
+  if (!supabaseUrl || !supabaseKey) {
+    return [];
+  }
+
+  const endpoint = new URL("/rest/v1/atividades", supabaseUrl);
+  endpoint.searchParams.set("select", "id,data,area,titulo,descricao,link");
+  endpoint.searchParams.set("order", "data.desc");
+  endpoint.searchParams.set("limit", "3");
+
+  const response = await fetch(endpoint.toString(), {
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not load activities");
+  }
+
+  const rows = (await response.json()) as SupabaseActivity[];
+
+  return rows.map((activity) => ({
+    id: String(activity.id),
+    date: formatActivityDate(activity.data),
+    area: activity.area,
+    title: activity.titulo,
+    description: activity.descricao,
+    href: activity.link,
+  }));
+}
+
+function formatActivityDate(date: string) {
+  const [year, month, day] = date.split("-").map(Number);
+
+  if (!year || !month || !day) {
+    return date;
+  }
+
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "short",
+    timeZone: "UTC",
+  })
+    .format(new Date(Date.UTC(year, month - 1, day)))
+    .replace(".", "")
+    .replace(" de ", " ")
+    .toUpperCase();
+}
+
+function getAreaColor(area: string) {
+  const normalized = area
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+
+  if (normalized.includes("computacao") || normalized.includes("comp")) {
+    return "#357DED";
+  }
+
+  if (normalized.includes("dados")) {
+    return "#FFDA33";
+  }
+
+  if (normalized.includes("educacao")) {
+    return "#D62839";
+  }
+
+  return "#4ADE80";
+}
 
 export default function Atividades() {
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    let ignore = false;
+
+    fetchActivities()
+      .then((items) => {
+        if (!ignore) {
+          setActivities(items);
+          setLoaded(true);
+        }
+      })
+      .catch(() => {
+        if (!ignore) {
+          setActivities([]);
+          setLoaded(true);
+        }
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   return (
     <section id="atividades" className="py-24" style={{ background: "#101010" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,57 +144,70 @@ export default function Atividades() {
 
         {/* Activity list */}
         <div style={{ borderTop: "1px solid #2E2E2E" }}>
-          {activities.map((a, i) => (
-            <Reveal key={a.title} delay={i * 80} y={16}>
-            <a
-              href={a.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="py-8 grid sm:grid-cols-12 gap-6 items-center group"
-              style={{ borderBottom: "1px solid #2E2E2E", display: "grid" }}
+          {activities.length === 0 && loaded ? (
+            <div
+              className="py-8 text-sm"
+              style={{ color: "#5E5E5E", borderBottom: "1px solid #2E2E2E" }}
             >
-              {/* Date */}
-              <div className="sm:col-span-2">
-                <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#3E3E3E" }}>
-                  {a.date}
-                </span>
-              </div>
+              Nenhuma atividade publicada no momento.
+            </div>
+          ) : null}
 
-              {/* Tag */}
-              <div className="sm:col-span-2">
-                <span
-                  className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded"
-                  style={{
-                    background: `${a.areaColor}18`,
-                    color: a.areaColor,
-                    border: `1px solid ${a.areaColor}30`,
-                  }}
-                >
-                  {a.area}
-                </span>
-              </div>
+          {activities.map((a, i) => {
+            const areaColor = getAreaColor(a.area);
 
-              {/* Title + description */}
-              <div className="sm:col-span-7">
-                <h3 className="font-bold text-white mb-1 group-hover:opacity-70 transition-opacity">
-                  {a.title}
-                </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "#5E5E5E" }}>
-                  {a.description}
-                </p>
-              </div>
+            return (
+              <Reveal key={a.id} delay={i * 80} y={16}>
+              <a
+                href={a.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-8 grid sm:grid-cols-12 gap-6 items-center group"
+                style={{ borderBottom: "1px solid #2E2E2E", display: "grid" }}
+              >
+                {/* Date */}
+                <div className="sm:col-span-2">
+                  <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#3E3E3E" }}>
+                    {a.date}
+                  </span>
+                </div>
 
-              {/* Arrow */}
-              <div className="sm:col-span-1 flex justify-end">
-                <ArrowUpRight
-                  size={16}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity"
-                  style={{ color: "#5E5E5E" }}
-                />
-              </div>
-            </a>
-            </Reveal>
-          ))}
+                {/* Tag */}
+                <div className="sm:col-span-2">
+                  <span
+                    className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded"
+                    style={{
+                      background: `${areaColor}18`,
+                      color: areaColor,
+                      border: `1px solid ${areaColor}30`,
+                    }}
+                  >
+                    {a.area}
+                  </span>
+                </div>
+
+                {/* Title + description */}
+                <div className="sm:col-span-7">
+                  <h3 className="font-bold text-white mb-1 group-hover:opacity-70 transition-opacity">
+                    {a.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "#5E5E5E" }}>
+                    {a.description}
+                  </p>
+                </div>
+
+                {/* Arrow */}
+                <div className="sm:col-span-1 flex justify-end">
+                  <ArrowUpRight
+                    size={16}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    style={{ color: "#5E5E5E" }}
+                  />
+                </div>
+              </a>
+              </Reveal>
+            );
+          })}
         </div>
 
         {/* Mobile Instagram link */}

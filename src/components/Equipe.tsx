@@ -1,224 +1,268 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Linkedin } from "lucide-react";
-import { members, type Area } from "@/data/members";
 import Reveal from "@/components/Reveal";
 
-const AREA_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  Computação:          { bg: "#357DED18", text: "#357DED", border: "#357DED30" },
-  Dados:               { bg: "#FFDA3318", text: "#FFDA33", border: "#FFDA3330" },
-  Educação:            { bg: "#D6283918", text: "#D62839", border: "#D6283930" },
+type LiderRow = {
+  id: string;
+  nome: string;
+  cargo: string;
+  area: string[] | string | null;
+  linkedin: string | null;
+  foto: string;
 };
 
-const FILTERS: { label: string; value: Area }[] = [
-  { label: "Computação", value: "Computação" },
-  { label: "Dados", value: "Dados" },
-  { label: "Educação", value: "Educação" },
-];
+type Lider = {
+  id: string;
+  nome: string;
+  cargo: string;
+  areas: string[];
+  linkedin?: string;
+  foto: string;
+};
 
-function shortName(name: string) {
-  const parts = name.trim().split(" ");
-  if (parts.length <= 2) return name;
-  return `${parts[0]} ${parts[parts.length - 1]}`;
+const AREA_COLORS: Record<string, { bg: string; text: string; border: string }> = {
+  Computação: { bg: "#357DED18", text: "#357DED", border: "#357DED30" },
+  Dados: { bg: "#FFDA3318", text: "#FFDA33", border: "#FFDA3330" },
+  Educação: { bg: "#D6283918", text: "#D62839", border: "#D6283930" },
+};
+
+const TEAM_PHOTO_URL =
+  "https://nzvfpnyobvhavabegazv.supabase.co/storage/v1/object/public/fotos-lideres/equipe.jpeg";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey =
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+function normalizeAreas(area: LiderRow["area"]) {
+  if (Array.isArray(area)) {
+    return area.filter(Boolean);
+  }
+
+  if (typeof area === "string" && area.trim()) {
+    return [area.trim()];
+  }
+
+  return [];
 }
 
-function initials(name: string) {
-  const parts = name.trim().split(" ").filter(p => !["de","da","do","dos","das","e"].includes(p.toLowerCase()));
-  if (parts.length === 1) return parts[0][0].toUpperCase();
-  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+function getAreaColor(area: string) {
+  return AREA_COLORS[area] ?? { bg: "#4ADE8018", text: "#4ADE80", border: "#4ADE8030" };
 }
 
-// Avatar gradient by initials (deterministic)
-const GRADIENTS = [
-  "linear-gradient(135deg,#357DED,#1a4fa8)",
-  "linear-gradient(135deg,#FFDA33,#c9a800)",
-  "linear-gradient(135deg,#D62839,#8c0017)",
-  "linear-gradient(135deg,#5E5E5E,#2e2e2e)",
-];
-function avatarGradient(name: string) {
-  const code = name.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
-  return GRADIENTS[code % GRADIENTS.length];
-}
-function avatarTextColor(name: string) {
-  const code = name.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
-  return code % GRADIENTS.length === 1 ? "#101010" : "#ffffff"; // yellow → dark text
-}
+async function fetchLideres(): Promise<Lider[]> {
+  if (!supabaseUrl || !supabaseKey) {
+    return [];
+  }
 
-const leadership = members.filter(m => m.roleRank < 3).sort((a, b) => a.roleRank - b.roleRank);
-const regular    = members.filter(m => m.roleRank === 3);
+  const endpoint = new URL("/rest/v1/lideres", supabaseUrl);
+  endpoint.searchParams.set("select", "id,nome,cargo,area,linkedin,foto");
+
+  const response = await fetch(endpoint.toString(), {
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Could not load lideres");
+  }
+
+  const rows = (await response.json()) as LiderRow[];
+
+  return rows
+    .map((lider) => ({
+      id: lider.id,
+      nome: lider.nome,
+      cargo: lider.cargo,
+      areas: normalizeAreas(lider.area),
+      linkedin: lider.linkedin ?? undefined,
+      foto: lider.foto,
+    }))
+    .sort((a, b) => {
+      const aIsPresident = a.cargo.toLowerCase().includes("presidente");
+      const bIsPresident = b.cargo.toLowerCase().includes("presidente");
+
+      if (aIsPresident && !bIsPresident) return -1;
+      if (!aIsPresident && bIsPresident) return 1;
+
+      return a.nome.localeCompare(b.nome, "pt-BR");
+    });
+}
 
 export default function Equipe() {
-  const [filter, setFilter] = useState<Area>("Computação");
+  const [lideres, setLideres] = useState<Lider[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
-  const filteredMembers = regular.filter(m => m.areas.includes(filter));
+  useEffect(() => {
+    let ignore = false;
+
+    fetchLideres()
+      .then((items) => {
+        if (!ignore) {
+          setLideres(items);
+          setLoaded(true);
+        }
+      })
+      .catch(() => {
+        if (!ignore) {
+          setLideres([]);
+          setLoaded(true);
+        }
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   return (
     <section id="equipe" className="py-24" style={{ background: "#101010" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Header */}
         <Reveal>
-          <p className="section-label mb-4">Time</p>
-          <h2 className="section-title mb-2">Nossa Equipe</h2>
-          <p className="section-subtitle mb-16">
-            {members.length} pessoas unidas pelo IME-USP e pela vontade de fazer algo real.
-          </p>
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center mb-16">
+            <div className="lg:col-span-5">
+              <p className="section-label mb-4">Time</p>
+              <h2 className="section-title mb-4">Nossa Equipe</h2>
+              <p className="text-lg leading-relaxed" style={{ color: "#A0A0A0" }}>
+                Mais de 50 membros unidos pelo IME-USP e pela vontade de transformar
+                conhecimento técnico em projetos reais. A liderança organiza as frentes,
+                mas o trabalho da IME Jr nasce do time completo.
+              </p>
+            </div>
+
+            <div className="lg:col-span-7">
+              <div className="relative max-w-3xl lg:ml-auto">
+                <div
+                  className="absolute -inset-3 rounded-2xl"
+                  style={{ border: "1px solid #2E2E2E", background: "#0B0B0B" }}
+                />
+                <div
+                  className="relative overflow-hidden rounded-xl border aspect-[16/10] md:aspect-[16/9]"
+                  style={{ borderColor: "#3E3E3E", background: "#000000" }}
+                >
+                  <img
+                    src={TEAM_PHOTO_URL}
+                    alt="Equipe da IME Jr"
+                    className="h-full w-full object-cover"
+                    style={{ objectPosition: "center 45%" }}
+                  />
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, rgba(0,0,0,0) 58%, rgba(0,0,0,0.42) 100%)",
+                    }}
+                  />
+                  <div
+                    className="absolute left-0 top-0 h-full w-1.5"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, #357DED 0%, #FFDA33 48%, #D62839 100%)",
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </Reveal>
 
-        {/* ── Leadership ─────────────────────────────────── */}
-        <div style={{ borderTop: "1px solid #2E2E2E" }} className="pb-16">
-          <p className="text-xs font-semibold uppercase tracking-widest pt-8 pb-8" style={{ color: "#3E3E3E" }}>
-            Liderança
-          </p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {leadership.map(m => (
-              <div
-                key={m.name}
-                className="flex items-center gap-4 p-4 rounded-xl border transition-all duration-200"
-                style={{ background: "#1A1A1A", borderColor: "#2E2E2E" }}
-              >
-                {/* Avatar */}
-                <div
-                  className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center font-black text-sm"
-                  style={{ background: avatarGradient(m.name), color: avatarTextColor(m.name) }}
-                >
-                  {initials(m.name)}
-                </div>
-
-                {/* Info */}
-                <div className="min-w-0 flex-1">
-                  <p className="font-semibold text-white text-sm truncate">{m.name}</p>
-                  <p className="text-xs mt-0.5" style={{ color: "#FFDA33" }}>{m.role}</p>
-                  <div className="flex flex-wrap gap-1 mt-1.5">
-                    {m.areas.map(a => (
-                      <span
-                        key={a}
-                        className="text-[10px] font-semibold px-1.5 py-0.5 rounded"
-                        style={{ background: AREA_COLORS[a]?.bg, color: AREA_COLORS[a]?.text }}
-                      >
-                        {a}
-                      </span>
-                    ))}
-                    {m.departments.map(d => (
-                      <span
-                        key={d}
-                        className="text-[10px] font-semibold px-1.5 py-0.5 rounded"
-                        style={{ background: "#2E2E2E", color: "#5E5E5E" }}
-                      >
-                        {d}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* LinkedIn */}
-                {m.linkedin && (
-                  <a
-                    href={m.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`LinkedIn de ${m.name}`}
-                    className="flex-shrink-0 transition-colors"
-                    style={{ color: "#3E3E3E" }}
-                    onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#3E3E3E")}
-                  >
-                    <Linkedin size={15} />
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── Members ────────────────────────────────────── */}
-        <div style={{ borderTop: "1px solid #2E2E2E" }}>
-          {/* Filter tabs */}
-          <div className="flex items-center gap-2 flex-wrap pt-8 pb-8">
-            <p className="text-xs font-semibold uppercase tracking-widest mr-2" style={{ color: "#3E3E3E" }}>
-              Membros
+        <div style={{ borderTop: "1px solid #2E2E2E" }} className="pt-8">
+          <div className="flex items-end justify-between gap-8 mb-8">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "#3E3E3E" }}>
+                Liderança
+              </p>
+              <h3 className="text-xl md:text-2xl font-black text-white">
+                Quem coordena as frentes da IME Jr
+              </h3>
+            </div>
+            <p className="hidden md:block text-sm max-w-sm leading-relaxed" style={{ color: "#5E5E5E" }}>
+              Abaixo destacamos as pessoas responsáveis por orientar áreas,
+              projetos e decisões.
             </p>
-            {FILTERS.map(f => {
-              const active = filter === f.value;
-              const aColor = AREA_COLORS[f.value]?.text;
-              return (
-                <button
-                  key={f.value}
-                  onClick={() => setFilter(f.value)}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-full border transition-all duration-150"
-                  style={{
-                    background: active ? aColor : "transparent",
-                    color: active ? (f.value === "Dados" ? "#101010" : "#ffffff") : "#5E5E5E",
-                    borderColor: active ? aColor : "#2E2E2E",
-                  }}
-                >
-                  {f.label}
-                  <span className="ml-1.5 opacity-60">
-                    {regular.filter(m => m.areas.includes(f.value)).length}
-                  </span>
-                </button>
-              );
-            })}
-            <span className="ml-auto text-xs" style={{ color: "#3E3E3E" }}>
-              {filteredMembers.length} {filteredMembers.length === 1 ? "membro" : "membros"}
-            </span>
           </div>
 
-          {/* Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {filteredMembers.map(m => (
-              <div
-                key={m.name}
-                className="p-4 rounded-xl border flex flex-col items-center text-center transition-all duration-200 group"
-                style={{ background: "#1A1A1A", borderColor: "#2E2E2E" }}
-                onMouseEnter={e => (e.currentTarget.style.borderColor = "#3E3E3E")}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = "#2E2E2E")}
-              >
-                {/* Avatar */}
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm mb-3 group-hover:scale-105 transition-transform duration-200"
-                  style={{ background: avatarGradient(m.name), color: avatarTextColor(m.name) }}
+          {lideres.length === 0 && loaded ? (
+            <div
+              className="py-8 text-sm"
+              style={{ color: "#5E5E5E", borderBottom: "1px solid #2E2E2E" }}
+            >
+              Nenhum líder publicado no momento.
+            </div>
+          ) : null}
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {lideres.map((lider, index) => (
+              <Reveal key={lider.id} delay={index * 60} y={16}>
+                <article
+                  className="rounded-lg border overflow-hidden transition-all duration-200 group"
+                  style={{ background: "#1A1A1A", borderColor: "#2E2E2E" }}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = "#3E3E3E")}
+                  onMouseLeave={e => (e.currentTarget.style.borderColor = "#2E2E2E")}
                 >
-                  {initials(m.name)}
-                </div>
-
-                {/* Name */}
-                <p className="text-xs font-semibold text-white leading-tight mb-1 line-clamp-2">
-                  {shortName(m.name)}
-                </p>
-
-                {/* Areas */}
-                {m.areas.length > 0 && (
-                  <div className="flex flex-wrap justify-center gap-1 mt-1">
-                    {m.areas.map(a => (
-                      <span
-                        key={a}
-                        className="text-[9px] font-bold px-1.5 py-0.5 rounded"
-                        style={{ background: AREA_COLORS[a]?.bg, color: AREA_COLORS[a]?.text }}
-                      >
-                        {a === "Computação" ? "Comp." : a}
-                      </span>
-                    ))}
+                  <div className="relative aspect-[4/3] overflow-hidden" style={{ background: "#101010" }}>
+                    <img
+                      src={lider.foto}
+                      alt={`Foto de ${lider.nome}`}
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
                   </div>
-                )}
 
-                {/* LinkedIn */}
-                {m.linkedin && (
-                  <a
-                    href={m.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`LinkedIn de ${m.name}`}
-                    className="mt-2 transition-colors"
-                    style={{ color: "#3E3E3E" }}
-                    onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#3E3E3E")}
-                  >
-                    <Linkedin size={12} />
-                  </a>
-                )}
-              </div>
+                  <div className="p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-bold text-white text-base truncate">
+                          {lider.nome}
+                        </h3>
+                        <p className="text-xs mt-1" style={{ color: "#FFDA33" }}>
+                          {lider.cargo}
+                        </p>
+                      </div>
+
+                      {lider.linkedin ? (
+                        <a
+                          href={lider.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`LinkedIn de ${lider.nome}`}
+                          className="flex-shrink-0 transition-colors mt-0.5"
+                          style={{ color: "#3E3E3E" }}
+                          onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
+                          onMouseLeave={e => (e.currentTarget.style.color = "#3E3E3E")}
+                        >
+                          <Linkedin size={15} />
+                        </a>
+                      ) : null}
+                    </div>
+
+                    {lider.areas.length > 0 ? (
+                      <div className="flex flex-wrap gap-1.5 mt-4">
+                        {lider.areas.map((area) => {
+                          const color = getAreaColor(area);
+
+                          return (
+                            <span
+                              key={area}
+                              className="text-[10px] font-semibold px-2 py-1 rounded"
+                              style={{
+                                background: color.bg,
+                                color: color.text,
+                                border: `1px solid ${color.border}`,
+                              }}
+                            >
+                              {area}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    ) : null}
+                  </div>
+                </article>
+              </Reveal>
             ))}
           </div>
         </div>

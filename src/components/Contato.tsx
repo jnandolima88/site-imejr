@@ -7,7 +7,7 @@ import Reveal from "@/components/Reveal";
 const contactInfo = [
   { icon: Mail, label: "E-mail", value: "contato@imejr.com", href: "mailto:contato@imejr.com" },
   { icon: Phone, label: "Telefone", value: "+55 11 3091-6241", href: "tel:+551130916241" },
-  { icon: MapPin, label: "Endereço", value: "R. do Matão, 1010 — Cidade Universitária, São Paulo/SP", href: "#" },
+  { icon: MapPin, label: "Endereço", value: "R. do Matão, 1010 — Cidade Universitária, São Paulo/SP", href: "https://maps.app.goo.gl/RMpqiJx4gpfB848v6", external: true},
 ];
 
 export default function Contato() {
@@ -47,7 +47,7 @@ export default function Contato() {
             <h2 className="section-title mb-8">Entre em Contato</h2>
 
             <div className="space-y-6">
-              {contactInfo.map(({ icon: Icon, label, value, href }) => (
+              {contactInfo.map(({ icon: Icon, label, value, href, external }) => (
                 <div key={label} className="flex gap-4">
                   <div
                     className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
@@ -73,14 +73,6 @@ export default function Contato() {
               ))}
             </div>
 
-            <div className="mt-10 pt-8" style={{ borderTop: "1px solid #2E2E2E" }}>
-              <p className="text-xs uppercase tracking-widest mb-4" style={{ color: "#3E3E3E" }}>
-                CNPJ
-              </p>
-              <p className="text-sm" style={{ color: "#5E5E5E" }}>
-                26.531.013/0001-80
-              </p>
-            </div>
           </Reveal>
 
           {/* Right: form */}
