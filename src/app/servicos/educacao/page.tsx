@@ -264,11 +264,11 @@ export default function EducacaoPage() {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div
-              className="rounded-lg p-8 md:p-12 grid lg:grid-cols-12 gap-10 items-center"
+              className="animated-service-gradient rounded-lg p-8 md:p-12 grid lg:grid-cols-12 gap-10 items-center"
               style={{
                 background:
-                  "linear-gradient(135deg, rgba(214,40,57,0.24) 0%, #1A1A1A 48%, #101010 100%)",
-                border: "1px solid #D6283955",
+                  "linear-gradient(135deg, rgba(214,40,57,0.18) 0%, #1A1A1A 42%, rgba(214,40,57,0.08) 62%, #101010 100%)",
+                border: "1px solid #D6283935",
               }}
             >
               <div className="lg:col-span-8">

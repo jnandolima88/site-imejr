@@ -29,6 +29,16 @@
   to   { opacity: 1; }
 }
 
+@keyframes serviceGradientShift {
+  from { background-position: 100% 50%; }
+  to   { background-position: 0% 50%; }
+}
+
+.animated-service-gradient {
+  background-size: 180% 180% !important;
+  animation: serviceGradientShift 22s linear infinite;
+}
+
 .animate-hero > * {
   opacity: 0;
   animation: fadeInUp 900ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -45,6 +55,10 @@
     animation-duration: 0.01ms !important;
     animation-delay:    0ms   !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .animated-service-gradient {
+    animation: none;
   }
 }
 

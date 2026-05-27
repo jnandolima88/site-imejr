@@ -267,11 +267,11 @@ export default function ComputacaoPage() {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div
-              className="rounded-lg p-8 md:p-12 grid lg:grid-cols-12 gap-10 items-center"
+              className="animated-service-gradient rounded-lg p-8 md:p-12 grid lg:grid-cols-12 gap-10 items-center"
               style={{
                 background:
-                  "linear-gradient(135deg, rgba(53,125,237,0.24) 0%, #1A1A1A 48%, #101010 100%)",
-                border: "1px solid #357DED55",
+                  "linear-gradient(135deg, rgba(53,125,237,0.18) 0%, #1A1A1A 42%, rgba(53,125,237,0.08) 62%, #101010 100%)",
+                border: "1px solid #357DED35",
               }}
             >
               <div className="lg:col-span-8">

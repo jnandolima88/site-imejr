@@ -269,11 +269,11 @@ export default function DadosPage() {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div
-              className="rounded-lg p-8 md:p-12 grid lg:grid-cols-12 gap-10 items-center"
+              className="animated-service-gradient rounded-lg p-8 md:p-12 grid lg:grid-cols-12 gap-10 items-center"
               style={{
                 background:
-                  "linear-gradient(135deg, rgba(255,218,51,0.22) 0%, #1A1A1A 48%, #101010 100%)",
-                border: "1px solid #FFDA3355",
+                  "linear-gradient(135deg, rgba(255,218,51,0.16) 0%, #1A1A1A 42%, rgba(255,218,51,0.07) 62%, #101010 100%)",
+                border: "1px solid #FFDA3335",
               }}
             >
               <div className="lg:col-span-8">
