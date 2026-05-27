@@ -140,13 +140,6 @@ export default function Equipe() {
                         "linear-gradient(180deg, rgba(0,0,0,0) 58%, rgba(0,0,0,0.42) 100%)",
                     }}
                   />
-                  <div
-                    className="absolute left-0 top-0 h-full w-1.5"
-                    style={{
-                      background:
-                        "linear-gradient(180deg, #357DED 0%, #FFDA33 48%, #D62839 100%)",
-                    }}
-                  />
                 </div>
               </div>
             </div>

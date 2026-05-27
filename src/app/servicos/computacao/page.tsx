@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Reveal from "@/components/Reveal";
 
 const accent = "#357DED";
 
@@ -113,7 +114,7 @@ export default function ComputacaoPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div className="grid lg:grid-cols-12 gap-12 items-end">
-              <div className="lg:col-span-8">
+              <Reveal className="lg:col-span-8" y={18}>
                 <p className="section-label mb-4" style={{ color: accent }}>
                   Serviços / Computação
                 </p>
@@ -121,9 +122,9 @@ export default function ComputacaoPage() {
                   Tecnologia robusta para tirar ideias do papel e evoluir
                   produtos reais.
                 </h1>
-              </div>
+              </Reveal>
 
-              <div className="lg:col-span-4">
+              <Reveal className="lg:col-span-4" delay={120} y={18}>
                 <p className="text-base md:text-lg leading-relaxed mb-8" style={{ color: "#A0A0A0" }}>
                   Desenvolvemos soluções digitais completas com rigor técnico,
                   visão prática e acesso ao ecossistema de excelência da USP.
@@ -138,7 +139,7 @@ export default function ComputacaoPage() {
                     <ArrowRight size={16} />
                   </Link>
                 </div>
-              </div>
+              </Reveal>
             </div>
           </div>
         </section>
@@ -146,8 +147,9 @@ export default function ComputacaoPage() {
         <section className="py-20" style={{ background: "#101010" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-3 gap-px" style={{ background: "#2E2E2E" }}>
-              {pillars.map((pillar) => (
-                <div key={pillar.title} className="p-8" style={{ background: "#101010" }}>
+              {pillars.map((pillar, index) => (
+                <Reveal key={pillar.title} delay={index * 80} y={16}>
+                <div className="service-panel p-8 h-full" style={{ background: "#101010" }}>
                   <h2 className="text-xl font-black text-white mb-4">
                     {pillar.title}
                   </h2>
@@ -155,6 +157,7 @@ export default function ComputacaoPage() {
                     {pillar.text}
                   </p>
                 </div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -162,19 +165,19 @@ export default function ComputacaoPage() {
 
         <section className="py-24" style={{ background: "#000000" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mb-14">
+            <Reveal className="max-w-3xl mb-14">
               <p className="section-label mb-4">Frentes de atuação</p>
               <h2 className="section-title">
                 Do Machine Learning ao back-end, cuidamos do caminho técnico
                 inteiro.
               </h2>
-            </div>
+            </Reveal>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {capabilities.map(({ icon: Icon, title, text }) => (
+              {capabilities.map(({ icon: Icon, title, text }, index) => (
+                <Reveal key={title} delay={index * 45} y={16}>
                 <article
-                  key={title}
-                  className="rounded-lg p-6 border"
+                  className="service-panel rounded-lg p-6 border h-full"
                   style={{ background: "#1A1A1A", borderColor: "#2E2E2E" }}
                 >
                   <div
@@ -188,6 +191,7 @@ export default function ComputacaoPage() {
                     {text}
                   </p>
                 </article>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -196,7 +200,7 @@ export default function ComputacaoPage() {
         <section className="py-24" style={{ background: "#101010" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-12 gap-14">
-              <div className="lg:col-span-5">
+              <Reveal className="lg:col-span-5">
                 <p className="section-label mb-4">Como trabalhamos</p>
                 <h2 className="section-title mb-5">
                   Método claro para sair do problema e chegar na entrega.
@@ -206,13 +210,13 @@ export default function ComputacaoPage() {
                   prioridades, riscos e entregáveis para construir com velocidade
                   sem perder qualidade técnica.
                 </p>
-              </div>
+              </Reveal>
 
-              <div className="lg:col-span-7" style={{ borderTop: "1px solid #2E2E2E" }}>
+              <Reveal className="lg:col-span-7" delay={100} y={18} style={{ borderTop: "1px solid #2E2E2E" }}>
                 {process.map((step, index) => (
                   <div
                     key={step}
-                    className="grid grid-cols-[56px_1fr] gap-6 py-6"
+                    className="service-process-row grid grid-cols-[56px_1fr] gap-6 py-6"
                     style={{ borderBottom: "1px solid #2E2E2E" }}
                   >
                     <span className="text-sm font-black" style={{ color: accent }}>
@@ -221,7 +225,7 @@ export default function ComputacaoPage() {
                     <p className="font-semibold text-white">{step}</p>
                   </div>
                 ))}
-              </div>
+              </Reveal>
             </div>
           </div>
         </section>
@@ -229,7 +233,7 @@ export default function ComputacaoPage() {
         <section className="py-24" style={{ background: "#000000" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-12 gap-12 items-start">
-              <div className="lg:col-span-5">
+              <Reveal className="lg:col-span-5">
                 <p className="section-label mb-4">Stack flexível</p>
                 <h2 className="section-title mb-5">
                   Ferramentas modernas escolhidas para o seu contexto.
@@ -239,23 +243,24 @@ export default function ComputacaoPage() {
                   acordo com custo, prazo, manutenção, integrações e maturidade
                   do produto.
                 </p>
-              </div>
+              </Reveal>
 
-              <div className="lg:col-span-7 flex flex-wrap gap-3">
-                {technologies.map((tech) => (
+              <Reveal className="lg:col-span-7 flex flex-wrap gap-3" delay={100} y={18}>
+                {technologies.map((tech, index) => (
                   <span
                     key={tech}
-                    className="text-sm font-semibold px-4 py-2 rounded-lg border"
+                    className="service-pill text-sm font-semibold px-4 py-2 rounded-lg border"
                     style={{
                       borderColor: "#2E2E2E",
                       color: "#A0A0A0",
                       background: "#101010",
+                      transitionDelay: `${index * 12}ms`,
                     }}
                   >
                     {tech}
                   </span>
                 ))}
-              </div>
+              </Reveal>
             </div>
           </div>
         </section>
@@ -266,7 +271,8 @@ export default function ComputacaoPage() {
           style={{ background: "#101010" }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div
+            <Reveal
+              y={18}
               className="animated-service-gradient rounded-lg p-8 md:p-12 grid lg:grid-cols-12 gap-10 items-center"
               style={{
                 background:
@@ -308,7 +314,7 @@ export default function ComputacaoPage() {
                   <ArrowRight size={16} />
                 </Link>
               </div>
-            </div>
+            </Reveal>
           </div>
         </section>
       </main>

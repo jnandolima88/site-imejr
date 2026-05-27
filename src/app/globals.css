@@ -119,4 +119,30 @@
     border-color: #3E3E3E;
     transform: translateY(-2px);
   }
+
+  .service-panel {
+    transition: transform 220ms ease, background-color 220ms ease, border-color 220ms ease;
+  }
+  .service-panel:hover {
+    background-color: #202020 !important;
+    border-color: #3E3E3E !important;
+    transform: translateY(-3px);
+  }
+
+  .service-process-row {
+    transition: background-color 220ms ease, padding-left 220ms ease;
+  }
+  .service-process-row:hover {
+    background-color: rgba(255,255,255,0.025);
+    padding-left: 0.5rem;
+  }
+
+  .service-pill {
+    transition: transform 200ms ease, color 200ms ease, border-color 200ms ease;
+  }
+  .service-pill:hover {
+    color: #FFFFFF !important;
+    border-color: #3E3E3E !important;
+    transform: translateY(-2px);
+  }
 }

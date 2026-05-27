@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Reveal from "@/components/Reveal";
 
 const accent = "#D62839";
 
@@ -112,16 +113,16 @@ export default function EducacaoPage() {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-12 gap-12 items-end">
-              <div className="lg:col-span-8">
+              <Reveal className="lg:col-span-8" y={18}>
                 <p className="section-label mb-4" style={{ color: accent }}>
                   Serviços / Educação
                 </p>
                 <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight max-w-5xl">
                   Educação que transforma conhecimento técnico em aprendizado claro, aplicável e de alto impacto.
                 </h1>
-              </div>
+              </Reveal>
 
-              <div className="lg:col-span-4">
+              <Reveal className="lg:col-span-4" delay={120} y={18}>
                 <p className="text-base md:text-lg leading-relaxed mb-8" style={{ color: "#A0A0A0" }}>
                   Desenvolvemos cursos, materiais e projetos educacionais
                   conectando a formação da USP a demandas concretas de ensino.
@@ -136,7 +137,7 @@ export default function EducacaoPage() {
                     <ArrowRight size={16} />
                   </Link>
                 </div>
-              </div>
+              </Reveal>
             </div>
           </div>
         </section>
@@ -144,8 +145,9 @@ export default function EducacaoPage() {
         <section className="py-20" style={{ background: "#101010" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-3 gap-px" style={{ background: "#2E2E2E" }}>
-              {pillars.map((pillar) => (
-                <div key={pillar.title} className="p-8" style={{ background: "#101010" }}>
+              {pillars.map((pillar, index) => (
+                <Reveal key={pillar.title} delay={index * 80} y={16}>
+                <div className="service-panel p-8 h-full" style={{ background: "#101010" }}>
                   <h2 className="text-xl font-black text-white mb-4">
                     {pillar.title}
                   </h2>
@@ -153,6 +155,7 @@ export default function EducacaoPage() {
                     {pillar.text}
                   </p>
                 </div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -160,19 +163,19 @@ export default function EducacaoPage() {
 
         <section className="py-24" style={{ background: "#000000" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mb-14">
+            <Reveal className="max-w-3xl mb-14">
               <p className="section-label mb-4">Frentes de atuação</p>
               <h2 className="section-title">
                 Do conteúdo à aula, ajudamos a construir experiências de
                 aprendizagem mais claras.
               </h2>
-            </div>
+            </Reveal>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {capabilities.map(({ icon: Icon, title, text }) => (
+              {capabilities.map(({ icon: Icon, title, text }, index) => (
+                <Reveal key={title} delay={index * 45} y={16}>
                 <article
-                  key={title}
-                  className="rounded-lg p-6 border"
+                  className="service-panel rounded-lg p-6 border h-full"
                   style={{ background: "#1A1A1A", borderColor: "#2E2E2E" }}
                 >
                   <div
@@ -186,6 +189,7 @@ export default function EducacaoPage() {
                     {text}
                   </p>
                 </article>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -194,7 +198,7 @@ export default function EducacaoPage() {
         <section className="py-24" style={{ background: "#101010" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-12 gap-14">
-              <div className="lg:col-span-5">
+              <Reveal className="lg:col-span-5">
                 <p className="section-label mb-4">Como trabalhamos</p>
                 <h2 className="section-title mb-5">
                   Método simples para alinhar conteúdo, público e formato.
@@ -204,13 +208,13 @@ export default function EducacaoPage() {
                   objetivo e qual formato faz mais sentido. A partir disso,
                   estruturamos uma entrega clara, aplicável e bem organizada.
                 </p>
-              </div>
+              </Reveal>
 
-              <div className="lg:col-span-7" style={{ borderTop: "1px solid #2E2E2E" }}>
+              <Reveal className="lg:col-span-7" delay={100} y={18} style={{ borderTop: "1px solid #2E2E2E" }}>
                 {process.map((step, index) => (
                   <div
                     key={step}
-                    className="grid grid-cols-[56px_1fr] gap-6 py-6"
+                    className="service-process-row grid grid-cols-[56px_1fr] gap-6 py-6"
                     style={{ borderBottom: "1px solid #2E2E2E" }}
                   >
                     <span className="text-sm font-black" style={{ color: accent }}>
@@ -219,7 +223,7 @@ export default function EducacaoPage() {
                     <p className="font-semibold text-white">{step}</p>
                   </div>
                 ))}
-              </div>
+              </Reveal>
             </div>
           </div>
         </section>
@@ -227,7 +231,7 @@ export default function EducacaoPage() {
         <section className="py-24" style={{ background: "#000000" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-12 gap-12 items-start">
-              <div className="lg:col-span-5">
+              <Reveal className="lg:col-span-5">
                 <p className="section-label mb-4">Formatos possíveis</p>
                 <h2 className="section-title mb-5">
                   Projetos educacionais ajustados ao seu contexto.
@@ -236,23 +240,24 @@ export default function EducacaoPage() {
                   A entrega pode ser uma aula, uma trilha completa, um material
                   revisado ou um projeto educacional mais amplo.
                 </p>
-              </div>
+              </Reveal>
 
-              <div className="lg:col-span-7 flex flex-wrap gap-3">
-                {formats.map((format) => (
+              <Reveal className="lg:col-span-7 flex flex-wrap gap-3" delay={100} y={18}>
+                {formats.map((format, index) => (
                   <span
                     key={format}
-                    className="text-sm font-semibold px-4 py-2 rounded-lg border"
+                    className="service-pill text-sm font-semibold px-4 py-2 rounded-lg border"
                     style={{
                       borderColor: "#2E2E2E",
                       color: "#A0A0A0",
                       background: "#101010",
+                      transitionDelay: `${index * 12}ms`,
                     }}
                   >
                     {format}
                   </span>
                 ))}
-              </div>
+              </Reveal>
             </div>
           </div>
         </section>
@@ -263,7 +268,8 @@ export default function EducacaoPage() {
           style={{ background: "#101010" }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div
+            <Reveal
+              y={18}
               className="animated-service-gradient rounded-lg p-8 md:p-12 grid lg:grid-cols-12 gap-10 items-center"
               style={{
                 background:
@@ -305,7 +311,7 @@ export default function EducacaoPage() {
                   <ArrowRight size={16} />
                 </Link>
               </div>
-            </div>
+            </Reveal>
           </div>
         </section>
       </main>

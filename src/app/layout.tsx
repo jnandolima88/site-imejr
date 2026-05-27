@@ -7,8 +7,9 @@ export const metadata: Metadata = {
     "Soluções em Computação, Análise de Dados e Educação por estudantes da USP. #VemSerGigante",
   keywords: ["empresa júnior", "IME", "USP", "computação", "dados", "educação"],
   icons: {
-    icon: "/logo.png",
-    apple: "/logo.png",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
 };
 
