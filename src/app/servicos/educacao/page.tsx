@@ -117,7 +117,7 @@ export default function EducacaoPage() {
                   Serviços / Educação
                 </p>
                 <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight max-w-5xl">
-                  Educação com rigor técnico, clareza didática e impacto real.
+                  Educação que transforma conhecimento técnico em aprendizado claro, aplicável e de alto impacto.
                 </h1>
               </div>
 

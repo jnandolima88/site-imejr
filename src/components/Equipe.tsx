@@ -1,17 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Linkedin } from "lucide-react";
 import Reveal from "@/components/Reveal";
-
-type LiderRow = {
-  id: string;
-  nome: string;
-  cargo: string;
-  area: string[] | string | null;
-  linkedin: string | null;
-  foto: string;
-};
 
 type Lider = {
   id: string;
@@ -29,96 +19,89 @@ const AREA_COLORS: Record<string, { bg: string; text: string; border: string }> 
 };
 
 const TEAM_PHOTO_URL =
-  "https://nzvfpnyobvhavabegazv.supabase.co/storage/v1/object/public/fotos-lideres/equipe.jpeg";
+  "/fotos-lideres/equipe.jpeg";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey =
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-function normalizeAreas(area: LiderRow["area"]) {
-  if (Array.isArray(area)) {
-    return area.filter(Boolean);
-  }
-
-  if (typeof area === "string" && area.trim()) {
-    return [area.trim()];
-  }
-
-  return [];
-}
+const lideres: Lider[] = [
+  {
+    id: "joel-landim",
+    nome: "Joel Landim",
+    cargo: "Presidente",
+    areas: ["Computação", "Dados", "Educação"],
+    linkedin: "https://www.linkedin.com/in/joel-landim/",
+    foto: "/fotos-lideres/joel-landim.jpeg",
+  },
+  {
+    id: "ana-ferreira",
+    nome: "Ana Ferreira",
+    cargo: "Diretora",
+    areas: ["Dados"],
+    foto: "/fotos-lideres/ana-ferreira.jpeg",
+  },
+  {
+    id: "arthur-yudji",
+    nome: "Arthur Yudji",
+    cargo: "Diretor",
+    areas: ["Computação"],
+    foto: "/fotos-lideres/arthur-yudji.jpeg",
+  },
+  {
+    id: "bruno-henrique",
+    nome: "Bruno Henrique",
+    cargo: "Diretor",
+    areas: ["Dados"],
+    foto: "/fotos-lideres/bruno-henrique.jpeg",
+  },
+  {
+    id: "felipe-faria",
+    nome: "Felipe Faria",
+    cargo: "Líder",
+    areas: ["Educação", "Dados"],
+    foto: "/fotos-lideres/felipe-faria.jpeg",
+  },
+  {
+    id: "isaque-nascimento",
+    nome: "Isaque Nascimento",
+    cargo: "Líder",
+    areas: ["Computação"],
+    foto: "/fotos-lideres/isaque-nascimento.jpeg",
+  },
+  {
+    id: "jose-fernando",
+    nome: "José Fernando",
+    cargo: "Diretor de RH",
+    areas: ["Computação", "Dados"],
+    linkedin: "https://www.linkedin.com/in/jnandolima",
+    foto: "/fotos-lideres/jose-fernando.jpeg",
+  },
+  {
+    id: "julia-isabelly",
+    nome: "Julia Isabelly",
+    cargo: "Diretora",
+    areas: ["Dados"],
+    linkedin: "https://www.linkedin.com/in/julia-isabelly-a18154195",
+    foto: "/fotos-lideres/julia-isabelly.jpeg",
+  },
+  {
+    id: "lucas-toshioka",
+    nome: "Lucas Toshioka",
+    cargo: "Diretor",
+    areas: ["Computação"],
+    foto: "/fotos-lideres/lucas-toshioka.jpeg",
+  },
+  {
+    id: "marina-murilla",
+    nome: "Marina Murilla",
+    cargo: "Líder",
+    areas: ["Dados"],
+    foto: "/fotos-lideres/marina-murilla.jpeg",
+  },
+];
 
 function getAreaColor(area: string) {
   return AREA_COLORS[area] ?? { bg: "#4ADE8018", text: "#4ADE80", border: "#4ADE8030" };
 }
 
-async function fetchLideres(): Promise<Lider[]> {
-  if (!supabaseUrl || !supabaseKey) {
-    return [];
-  }
-
-  const endpoint = new URL("/rest/v1/lideres", supabaseUrl);
-  endpoint.searchParams.set("select", "id,nome,cargo,area,linkedin,foto");
-
-  const response = await fetch(endpoint.toString(), {
-    headers: {
-      apikey: supabaseKey,
-      Authorization: `Bearer ${supabaseKey}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error("Could not load lideres");
-  }
-
-  const rows = (await response.json()) as LiderRow[];
-
-  return rows
-    .map((lider) => ({
-      id: lider.id,
-      nome: lider.nome,
-      cargo: lider.cargo,
-      areas: normalizeAreas(lider.area),
-      linkedin: lider.linkedin ?? undefined,
-      foto: lider.foto,
-    }))
-    .sort((a, b) => {
-      const aIsPresident = a.cargo.toLowerCase().includes("presidente");
-      const bIsPresident = b.cargo.toLowerCase().includes("presidente");
-
-      if (aIsPresident && !bIsPresident) return -1;
-      if (!aIsPresident && bIsPresident) return 1;
-
-      return a.nome.localeCompare(b.nome, "pt-BR");
-    });
-}
-
 export default function Equipe() {
-  const [lideres, setLideres] = useState<Lider[]>([]);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    let ignore = false;
-
-    fetchLideres()
-      .then((items) => {
-        if (!ignore) {
-          setLideres(items);
-          setLoaded(true);
-        }
-      })
-      .catch(() => {
-        if (!ignore) {
-          setLideres([]);
-          setLoaded(true);
-        }
-      });
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
-
   return (
     <section id="equipe" className="py-24" style={{ background: "#101010" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -185,15 +168,6 @@ export default function Equipe() {
               projetos e decisões.
             </p>
           </div>
-
-          {lideres.length === 0 && loaded ? (
-            <div
-              className="py-8 text-sm"
-              style={{ color: "#5E5E5E", borderBottom: "1px solid #2E2E2E" }}
-            >
-              Nenhum líder publicado no momento.
-            </div>
-          ) : null}
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {lideres.map((lider, index) => (

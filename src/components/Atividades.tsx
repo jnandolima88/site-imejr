@@ -1,74 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import Reveal from "@/components/Reveal";
-import { Activity } from "@/data/activities";
-
-type SupabaseActivity = {
-  id: string | number;
-  data: string;
-  area: string;
-  titulo: string;
-  descricao: string;
-  link: string;
-};
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey =
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-async function fetchActivities(): Promise<Activity[]> {
-  if (!supabaseUrl || !supabaseKey) {
-    return [];
-  }
-
-  const endpoint = new URL("/rest/v1/atividades", supabaseUrl);
-  endpoint.searchParams.set("select", "id,data,area,titulo,descricao,link");
-  endpoint.searchParams.set("order", "data.desc");
-  endpoint.searchParams.set("limit", "3");
-
-  const response = await fetch(endpoint.toString(), {
-    headers: {
-      apikey: supabaseKey,
-      Authorization: `Bearer ${supabaseKey}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error("Could not load activities");
-  }
-
-  const rows = (await response.json()) as SupabaseActivity[];
-
-  return rows.map((activity) => ({
-    id: String(activity.id),
-    date: formatActivityDate(activity.data),
-    area: activity.area,
-    title: activity.titulo,
-    description: activity.descricao,
-    href: activity.link,
-  }));
-}
-
-function formatActivityDate(date: string) {
-  const [year, month, day] = date.split("-").map(Number);
-
-  if (!year || !month || !day) {
-    return date;
-  }
-
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "short",
-    timeZone: "UTC",
-  })
-    .format(new Date(Date.UTC(year, month - 1, day)))
-    .replace(".", "")
-    .replace(" de ", " ")
-    .toUpperCase();
-}
+import { activities } from "@/data/activities";
 
 function getAreaColor(area: string) {
   const normalized = area
@@ -84,6 +18,10 @@ function getAreaColor(area: string) {
     return "#FFDA33";
   }
 
+  if (normalized.includes("ps") || normalized.includes("selecao")) {
+    return "#FFDA33";
+  }
+
   if (normalized.includes("educacao")) {
     return "#D62839";
   }
@@ -92,31 +30,6 @@ function getAreaColor(area: string) {
 }
 
 export default function Atividades() {
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    let ignore = false;
-
-    fetchActivities()
-      .then((items) => {
-        if (!ignore) {
-          setActivities(items);
-          setLoaded(true);
-        }
-      })
-      .catch(() => {
-        if (!ignore) {
-          setActivities([]);
-          setLoaded(true);
-        }
-      });
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
-
   return (
     <section id="atividades" className="py-24" style={{ background: "#101010" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -144,15 +57,6 @@ export default function Atividades() {
 
         {/* Activity list */}
         <div style={{ borderTop: "1px solid #2E2E2E" }}>
-          {activities.length === 0 && loaded ? (
-            <div
-              className="py-8 text-sm"
-              style={{ color: "#5E5E5E", borderBottom: "1px solid #2E2E2E" }}
-            >
-              Nenhuma atividade publicada no momento.
-            </div>
-          ) : null}
-
           {activities.map((a, i) => {
             const areaColor = getAreaColor(a.area);
 
