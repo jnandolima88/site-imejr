@@ -17,13 +17,17 @@ src/
 ├── app/
 │   ├── layout.tsx       # Metadata, favicon, fontes
 │   └── page.tsx         # Página principal (composição das seções)
+│   └── servicos/        # Páginas individuais dos núcleos
+│       ├── computacao/page.tsx
+│       ├── dados/page.tsx
+│       └── educacao/page.tsx
 ├── components/
 │   ├── Navbar.tsx        # Navegação fixa com scroll-aware
 │   ├── Hero.tsx          # Seção inicial com animação de entrada
 │   ├── Sobre.tsx         # Quem somos + contadores animados
 │   ├── Servicos.tsx      # Computação, Dados e Educação
 │   ├── Atividades.tsx    # Feed de atividades recentes
-│   ├── Equipe.tsx        # Lideranças + grid de membros com filtro por área
+│   ├── Equipe.tsx        # Lideranças e suas fotos
 │   ├── Contato.tsx       # Formulário de contato
 │   ├── Footer.tsx        # Rodapé com redes sociais
 │   ├── Reveal.tsx        # Wrapper de scroll-reveal (fade + slide-up)
@@ -34,6 +38,8 @@ src/
     └── useInView.ts      # Hook IntersectionObserver com suporte a once/threshold
 public/
 └── logo.png              # Logo branca (fundo transparente)
+├── favicon.png           # Ícone para navegador
+├── contact.php           # Envio do formulário de contato via PHP/Hostinger
 ```
 
 ## Paleta de cores
