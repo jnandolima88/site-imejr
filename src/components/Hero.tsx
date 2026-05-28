@@ -23,7 +23,7 @@ export default function Hero() {
 
         {/* 1 */}
         <p className="text-xs font-semibold uppercase tracking-[0.2em] mb-8" style={{ color: "#5E5E5E" }}>
-          Empresa Júnior — IME USP
+          Empresa Júnior de Informática, Matemática e Estatística
         </p>
 
         {/* 2 */}
@@ -34,11 +34,15 @@ export default function Hero() {
           <span style={{ color: "#FFDA33" }}>Educação.</span>
         </h1>
 
-        {/* 3 */}
-        <p className="text-lg md:text-xl max-w-xl mx-auto mb-10 leading-relaxed" style={{ color: "#A0A0A0" }}>
-          Estudantes do IME-USP resolvendo problemas reais para empresas e
-          instituições.
-        </p>
+        <div className="max-w-2xl mx-auto mb-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] mb-2" style={{ color: "#FFDA33" }}>
+            Talento USP para resolver problemas reais.
+          </p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "#5E5E5E" }}>
+            Apoiados pelo ecossistema de excelência da Universidade de São Paulo,
+            criamos soluções sob medida para transformar o seu desafio em resultado.
+          </p>
+        </div>
 
         {/* 4 */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

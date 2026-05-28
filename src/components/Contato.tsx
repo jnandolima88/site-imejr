@@ -7,22 +7,44 @@ import Reveal from "@/components/Reveal";
 const contactInfo = [
   { icon: Mail, label: "E-mail", value: "contato@imejr.com", href: "mailto:contato@imejr.com" },
   { icon: Phone, label: "Telefone", value: "+55 11 3091-6241", href: "tel:+551130916241" },
-  { icon: MapPin, label: "Endereço", value: "R. do Matão, 1010 — Cidade Universitária, São Paulo/SP", href: "#" },
+  { icon: MapPin, label: "Endereço", value: "R. do Matão, 1010 — Cidade Universitária, São Paulo/SP", href: "https://maps.app.goo.gl/RMpqiJx4gpfB848v6", external: true},
 ];
 
 export default function Contato() {
-  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
-  const [form, setForm] = useState({ name: "", email: "", area: "", message: "" });
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [form, setForm] = useState({ name: "", email: "", area: "", message: "", company: "" });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
+  ) => {
+    setStatus((current) => (current === "error" ? "idle" : current));
+    setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("sending");
-    await new Promise((r) => setTimeout(r, 1200));
-    setStatus("sent");
+
+    try {
+      const response = await fetch("/contact.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const result = (await response.json()) as { ok?: boolean };
+
+      if (!response.ok || !result.ok) {
+        throw new Error("Could not send message");
+      }
+
+      setStatus("sent");
+    } catch {
+      setStatus("error");
+    }
   };
 
   const inputStyle = {
@@ -47,7 +69,7 @@ export default function Contato() {
             <h2 className="section-title mb-8">Entre em Contato</h2>
 
             <div className="space-y-6">
-              {contactInfo.map(({ icon: Icon, label, value, href }) => (
+              {contactInfo.map(({ icon: Icon, label, value, href, external }) => (
                 <div key={label} className="flex gap-4">
                   <div
                     className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
@@ -73,14 +95,6 @@ export default function Contato() {
               ))}
             </div>
 
-            <div className="mt-10 pt-8" style={{ borderTop: "1px solid #2E2E2E" }}>
-              <p className="text-xs uppercase tracking-widest mb-4" style={{ color: "#3E3E3E" }}>
-                CNPJ
-              </p>
-              <p className="text-sm" style={{ color: "#5E5E5E" }}>
-                26.531.013/0001-80
-              </p>
-            </div>
           </Reveal>
 
           {/* Right: form */}
@@ -101,7 +115,7 @@ export default function Contato() {
                   Retornaremos em até 48h úteis.
                 </p>
                 <button
-                  onClick={() => { setStatus("idle"); setForm({ name: "", email: "", area: "", message: "" }); }}
+                  onClick={() => { setStatus("idle"); setForm({ name: "", email: "", area: "", message: "", company: "" }); }}
                   className="mt-6 text-sm font-medium transition-colors"
                   style={{ color: "#5E5E5E" }}
                   onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
@@ -116,6 +130,17 @@ export default function Contato() {
                 className="rounded-2xl p-8 space-y-5"
                 style={{ background: "#1A1A1A", border: "1px solid #2E2E2E" }}
               >
+                <input
+                  type="text"
+                  name="company"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={form.company}
+                  onChange={handleChange}
+                  className="hidden"
+                  aria-hidden="true"
+                />
+
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "#5E5E5E" }}>
@@ -189,6 +214,13 @@ export default function Contato() {
                     onBlur={e => (e.currentTarget.style.borderColor = "#2E2E2E")}
                   />
                 </div>
+
+                {status === "error" ? (
+                  <p className="text-sm leading-relaxed" style={{ color: "#D62839" }}>
+                    Não foi possível enviar a mensagem agora. Tente novamente em alguns instantes
+                    ou fale direto pelo e-mail contato@imejr.com.
+                  </p>
+                ) : null}
 
                 <button
                   type="submit"

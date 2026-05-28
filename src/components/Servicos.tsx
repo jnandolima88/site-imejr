@@ -1,35 +1,70 @@
 "use client";
 
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Reveal from "@/components/Reveal";
 
 const services = [
   {
+    slug: "computacao",
     num: "01",
-    accent: "#357DED",          // azul → Computação
+    accent: "#357DED",
     title: "Computação",
     description:
-      "Do site ao sistema inteligente: desenvolvemos soluções digitais completas com as tecnologias mais modernas do mercado.",
-    body: "Atuamos em desenvolvimento web, aplicativos, sistemas de informação e integração de Machine Learning em produtos reais. Nossa equipe aplica boas práticas de UX/UI, arquitetura de software e metodologias ágeis",
-    note: "Trabalhamos com React, Next.js, Node.js, Python, WordPress e muito mais. Se você precisa de presença digital, automação ou um sistema sob medida, a gente resolve.",
+      "Criamos, evoluímos e integramos soluções digitais completas, de sistemas web a produtos com Machine Learning e automações inteligentes.",
+    body:
+      "Atuamos em desenvolvimento de software sob medida, back-end, front-end, aplicativos, automações, integração de APIs, produtos com IA, infraestrutura, segurança e melhoria de sistemas já existentes.",
+    highlights: [
+      "Machine Learning aplicado a produtos reais",
+      "Automações de processos internos",
+      "Back-end, APIs e integrações entre sistemas",
+      "Sites, plataformas, dashboards e aplicativos",
+      "Auditoria, correção e evolução de produtos criados com IA",
+      "Cybersegurança, revisão técnica e boas práticas",
+      "UX/UI, arquitetura de software e metodologias ágeis",
+    ],
+    note:
+      "Trabalhamos com tecnologias como React, Next.js, Node.js, Python, WordPress, bancos de dados, serviços em nuvem e ferramentas modernas de desenvolvimento.",
   },
   {
+    slug: "dados",
     num: "02",
-    accent: "#FFDA33",          // amarelo → Dados
+    accent: "#FFDA33",
     title: "Análise de Dados",
     description:
-      "Nosso time de Dados atua dando visibilidade, gerando insights e resolvendo problemas, sejam eles de caráter Empresarial ou Acadêmico.",
-    body: "Trabalhamos com Python, R, SQL, Dashboards, Machine Learning, Inteligência Artificial e Estatística.",
-    note: "Geração de insights, análises estatísticas, geração de métricas, visualizações em cima de bases de dados e construção de modelos de Machine Learning para previsão de números com base em dados estruturados.",
+      "Transformamos dados em clareza, seja para decisões empresariais, pesquisas acadêmicas ou projetos científicos.",
+    body:
+      "Apoiamos empresas que querem entender melhor seus indicadores, operações e clientes, e também pesquisadores, alunos e grupos acadêmicos que precisam estruturar, analisar ou interpretar dados com rigor estatístico.",
+    highlights: [
+      "Análises para negócios, operações e tomada de decisão",
+      "Apoio técnico para pesquisas, iniciações científicas e artigos",
+      "Limpeza, organização e estruturação de bases de dados",
+      "Dashboards, métricas e visualizações",
+      "Modelagem estatística e análise exploratória",
+      "Machine Learning para previsão, classificação e descoberta de padrões",
+      "Python, R, SQL, IA e ferramentas modernas de dados",
+    ],
+    note:
+      "Unimos estatística, programação e visão analítica para entregar resultados compreensíveis, bem fundamentados e úteis para o seu objetivo.",
   },
   {
+    slug: "educacao",
     num: "03",
-    accent: "#D62839",          // vermelho → Educação
+    accent: "#D62839",
     title: "Educação",
     description:
-      "Nosso time de Educação desenvolve projetos que atendam a demanda das instituições educacionais, de estudantes do ensino básico e pré-vestibulares.",
-    body: "Nossa equipe trabalha com editoração de questões, materiais didáticos, divulgação matemática e com o cursinho Pré-vestibular IMEnsina.",
-    note: "Atuamos no que diz respeito ao ensino de matemática e ao uso de recursos tecnológicos na sala de aula.",
+      "Desenvolvemos projetos voltados a instituições educacionais, estudantes do ensino básico e iniciativas pré-vestibulares.",
+    body:
+      "Nossa equipe trabalha com editoração de questões, materiais didáticos, divulgação matemática e com o cursinho Pré-vestibular IMEnsina.",
+    highlights: [
+      "Materiais didáticos",
+      "Editoração de questões",
+      "Divulgação matemática",
+      "Projetos de ensino com tecnologia",
+      "Apoio a iniciativas educacionais",
+    ],
+    note:
+      "Atuamos especialmente no ensino de matemática e no uso de recursos tecnológicos em sala de aula.",
   },
 ];
 
@@ -46,58 +81,51 @@ export default function Servicos() {
       <div style={{ borderTop: "1px solid #2E2E2E" }}>
         {services.map((s, i) => (
           <Reveal key={s.num} delay={i * 60} y={20}>
-          <div
-            className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid lg:grid-cols-12 gap-12 items-start"
-            style={{
-              borderBottom: "1px solid #2E2E2E",
-            }}
-          >
-            {/* Number + title */}
-            <div className="lg:col-span-4">
-              <span
-                className="text-xs font-bold tracking-widest mb-3 block"
-                style={{ color: s.accent }}
-              >
-                {s.num}
-              </span>
-              <h3 className="text-3xl font-black text-white mb-4">{s.title}</h3>
-              <p className="text-base leading-relaxed" style={{ color: "#A0A0A0" }}>
-                {s.description}
-              </p>
-            </div>
+            <div
+              className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid lg:grid-cols-12 gap-12 items-start"
+              style={{
+                borderBottom: "1px solid #2E2E2E",
+              }}
+            >
+              {/* Number + title */}
+              <div className="lg:col-span-4">
+                <span
+                  className="text-xs font-bold tracking-widest mb-3 block"
+                  style={{ color: s.accent }}
+                >
+                  {s.num}
+                </span>
+                <h3 className="text-3xl font-black text-white mb-4">{s.title}</h3>
+                <p className="text-base leading-relaxed" style={{ color: "#A0A0A0" }}>
+                  {s.description}
+                </p>
+              </div>
 
-            {/* Body */}
-            <div className="lg:col-span-5">
-              <p className="text-base leading-relaxed mb-4" style={{ color: "#5E5E5E" }}>
-                {s.body}
-              </p>
-              <p className="text-sm leading-relaxed" style={{ color: "#3E3E3E" }}>
-                {s.note}
-              </p>
-            </div>
+              {/* Body */}
+              <div className="lg:col-span-5">
+                <p className="text-base leading-relaxed mb-4" style={{ color: "#5E5E5E" }}>
+                  {s.body}
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "#3E3E3E" }}>
+                  {s.note}
+                </p>
+              </div>
 
-            {/* CTAs */}
-            <div className="lg:col-span-3 flex flex-col gap-3 lg:items-end">
-              <a
-                href="#contato"
-                className="btn-primary text-sm whitespace-nowrap"
-                style={{ background: s.accent, color: s.accent === "#FFDA33" ? "#101010" : "#ffffff" }}
-              >
-                Contato
-                <ArrowRight size={14} />
-              </a>
-              <a
-                href="#atividades"
-                className="text-sm font-medium transition-colors flex items-center gap-1.5 group"
-                style={{ color: "#5E5E5E" }}
-                onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
-                onMouseLeave={e => (e.currentTarget.style.color = "#5E5E5E")}
-              >
-                Confira nossos trabalhos
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </a>
+              {/* CTAs */}
+              <div className="lg:col-span-3 flex flex-col gap-3 lg:items-end">
+                <Link
+                  href={`/servicos/${s.slug}`}
+                  className="btn-primary text-sm whitespace-nowrap"
+                  style={{
+                    background: s.accent,
+                    color: s.accent === "#FFDA33" ? "#101010" : "#ffffff",
+                  }}
+                >
+                  Saiba mais
+                  <ArrowRight size={14} />
+                </Link>
+              </div>
             </div>
-          </div>
           </Reveal>
         ))}
       </div>
