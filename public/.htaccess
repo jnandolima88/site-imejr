@@ -1,0 +1,10 @@
+DirectoryIndex index.html
+RewriteEngine On
+
+# Serve Next static-export pages without requiring the .html extension.
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+)$ $1.html [L]
