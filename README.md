@@ -1,5 +1,9 @@
 # Site IME Jr
 
+<p align="center">
+  <img src="public/%5BWALLPAPER%5D%20Fundo%20preto.jpeg" alt="Banner IME Jr" width="100%" />
+</p>
+
 Site institucional da **IME Jr — Empresa Júnior do IME-USP**, desenvolvido com Next.js 14 e Tailwind CSS.
 
 ## Stack
