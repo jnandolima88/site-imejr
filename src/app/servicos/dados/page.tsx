@@ -307,7 +307,7 @@ export default function DadosPage() {
 
               <div className="lg:col-span-4 lg:flex lg:justify-end">
                 <Link
-                  href="https://calendly.com/joel-landim-imejr/30min"
+                  href="https://calendly.com/contato-dados-imejr/30min"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary justify-center w-full sm:w-auto"

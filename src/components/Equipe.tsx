@@ -10,6 +10,7 @@ type Lider = {
   areas: string[];
   linkedin?: string;
   foto: string;
+  fotoClassName?: string;
 };
 
 const AREA_COLORS: Record<string, { bg: string; text: string; border: string }> = {
@@ -28,42 +29,49 @@ const lideres: Lider[] = [
     cargo: "Presidente",
     areas: ["Computação", "Dados", "Educação"],
     linkedin: "https://www.linkedin.com/in/joel-landim/",
-    foto: "/fotos-lideres/joel-landim.jpeg",
+    foto: "/fotos-lideres/Joel.png",
+    fotoClassName: "h-[88%] w-[88%]",
   },
   {
     id: "ana-ferreira",
-    nome: "Ana Ferreira",
-    cargo: "Diretora",
+    nome: "Ana Beatriz",
+    cargo: "Diretora Financeira",
     areas: ["Dados"],
-    foto: "/fotos-lideres/ana-ferreira.jpeg",
+    linkedin: "https://www.linkedin.com/in/ana-beatriz-alves-ferreira-7064862a1/",
+    foto: "/fotos-lideres/Ana.png",
+    fotoClassName: "h-[104%] w-[146%]",
   },
   {
     id: "arthur-yudji",
     nome: "Arthur Yudji",
-    cargo: "Diretor",
+    cargo: "Diretor de Negócios",
     areas: ["Computação"],
-    foto: "/fotos-lideres/arthur-yudji.jpeg",
+    linkedin: "https://www.linkedin.com/in/arthur-yudji-i-586748299/",
+    foto: "/fotos-lideres/Arthur.png",
   },
   {
     id: "bruno-henrique",
     nome: "Bruno Henrique",
-    cargo: "Diretor",
+    cargo: "Diretor de Negócios",
     areas: ["Dados"],
-    foto: "/fotos-lideres/bruno-henrique.jpeg",
+    linkedin: "https://www.linkedin.com/in/bruno-henrique-alves-santos/",
+    foto: "/fotos-lideres/Bruno.png",
   },
   {
     id: "felipe-faria",
     nome: "Felipe Faria",
-    cargo: "Líder",
+    cargo: "Líder de Educação",
     areas: ["Educação", "Dados"],
-    foto: "/fotos-lideres/felipe-faria.jpeg",
+    linkedin: "https://www.linkedin.com/in/felipe-segantine-de-faria-3a9b45237/",
+    foto: "/fotos-lideres/Felipe.png",
   },
   {
     id: "isaque-nascimento",
     nome: "Isaque Nascimento",
-    cargo: "Líder",
+    cargo: "Líder de Computação",
     areas: ["Computação"],
-    foto: "/fotos-lideres/isaque-nascimento.jpeg",
+    linkedin: "https://www.linkedin.com/in/ionascimento/?locale=pt",
+    foto: "/fotos-lideres/Isaque.png",
   },
   {
     id: "jose-fernando",
@@ -71,29 +79,31 @@ const lideres: Lider[] = [
     cargo: "Diretor de RH",
     areas: ["Computação", "Dados"],
     linkedin: "https://www.linkedin.com/in/jnandolima",
-    foto: "/fotos-lideres/jose-fernando.jpeg",
+    foto: "/fotos-lideres/José.png",
   },
   {
     id: "julia-isabelly",
     nome: "Julia Isabelly",
-    cargo: "Diretora",
+    cargo: "Diretora Jurídica",
     areas: ["Dados"],
     linkedin: "https://www.linkedin.com/in/julia-isabelly-a18154195",
-    foto: "/fotos-lideres/julia-isabelly.jpeg",
+    foto: "/fotos-lideres/Julia.png",
   },
   {
     id: "lucas-toshioka",
     nome: "Lucas Toshioka",
-    cargo: "Diretor",
+    cargo: "Diretor de Marketing",
     areas: ["Computação"],
-    foto: "/fotos-lideres/lucas-toshioka.jpeg",
+    linkedin: "https://www.linkedin.com/in/lucas-toshioka-tenório-08562134a/",
+    foto: "/fotos-lideres/Lucas.png",
   },
   {
     id: "marina-murilla",
     nome: "Marina Murilla",
-    cargo: "Líder",
+    cargo: "Líder de Dados",
     areas: ["Dados"],
-    foto: "/fotos-lideres/marina-murilla.jpeg",
+    linkedin: "https://www.linkedin.com/in/marina-dos-santos-murilla/",
+    foto: "/fotos-lideres/Marina.png",
   },
 ];
 
@@ -162,27 +172,38 @@ export default function Equipe() {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             {lideres.map((lider, index) => (
               <Reveal key={lider.id} delay={index * 60} y={16}>
                 <article
-                  className="rounded-lg border overflow-hidden transition-all duration-200 group"
+                  className="rounded-lg border overflow-hidden transition-all duration-200 group h-full"
                   style={{ background: "#1A1A1A", borderColor: "#2E2E2E" }}
                   onMouseEnter={e => (e.currentTarget.style.borderColor = "#3E3E3E")}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = "#2E2E2E")}
                 >
-                  <div className="relative aspect-[4/3] overflow-hidden" style={{ background: "#101010" }}>
+                  <div
+                    className="relative aspect-[4/5] overflow-hidden"
+                    style={{
+                      background: "#101010",
+                      borderBottom: "1px solid #2E2E2E",
+                    }}
+                  >
+                    <div
+                      className="absolute left-4 right-4 bottom-0 h-px"
+                      style={{ background: "#3E3E3E" }}
+                    />
                     <img
                       src={lider.foto}
                       alt={`Foto de ${lider.nome}`}
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      loading="lazy"
+                      className={`absolute inset-x-0 bottom-0 mx-auto object-contain object-bottom transition-transform duration-300 group-hover:scale-[1.03] ${lider.fotoClassName ?? "h-[92%] w-[92%]"}`}
                     />
                   </div>
 
                   <div className="p-4">
                     <div className="flex items-start gap-3">
                       <div className="min-w-0 flex-1">
-                        <h3 className="font-bold text-white text-base truncate">
+                        <h3 className="font-bold text-white text-base leading-tight min-h-10">
                           {lider.nome}
                         </h3>
                         <p className="text-xs mt-1" style={{ color: "#FFDA33" }}>
