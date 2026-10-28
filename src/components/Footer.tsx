@@ -2,6 +2,7 @@
 
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import Image from "next/image";
+import { navigation } from "@/data/navigation";
 
 const socials = [
   { icon: Facebook, href: "https://facebook.com/IMEJuniorUSP", label: "Facebook" },
@@ -11,11 +12,7 @@ const socials = [
 ];
 
 const navLinks = [
-  { label: "Quem Somos", href: "/#sobre" },
-  { label: "Computação", href: "/servicos/computacao" },
-  { label: "Análise de Dados", href: "/servicos/dados" },
-  { label: "Educação", href: "/servicos/educacao" },
-  { label: "Atividades", href: "/#atividades" },
+  ...navigation,
   { label: "Contato", href: "/#contato" },
 ];
 
@@ -69,7 +66,7 @@ export default function Footer() {
 
           {/* Nav */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: "#3E3E3E" }}>
+            <h4 className="type-secondary mb-4" style={{ color: "#3E3E3E" }}>
               Navegação
             </h4>
             <ul className="space-y-2.5">
@@ -91,7 +88,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: "#3E3E3E" }}>
+            <h4 className="type-secondary mb-4" style={{ color: "#3E3E3E" }}>
               Contatos
             </h4>
             <div className="space-y-2.5 text-sm" style={{ color: "#5E5E5E" }}>

@@ -22,7 +22,7 @@ export default function Sobre() {
               style={{ color: "#A0A0A0" }}
             >
               Atendemos pessoas físicas e jurídicas que buscam soluções em
-              Computação, Análise de Dados e Educação.
+              Computação e Análise de Dados.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-2">
@@ -50,7 +50,7 @@ export default function Sobre() {
           {/* Right: numbers */}
           <div className="grid grid-cols-2 gap-px" style={{ background: "#2E2E2E" }}>
             {[
-              { end: 3, suffix: "", label: "áreas de atuação" },
+              { end: 2, suffix: "", label: "áreas de atuação" },
               { end: 30, suffix: "+", label: "anos de história" },
               { end: 100, suffix: "+", label: "projetos entregues" },
               { end: 50, suffix: "+", label: "membros do IME" },

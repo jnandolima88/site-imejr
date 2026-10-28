@@ -191,9 +191,7 @@ export default function Contato() {
                   >
                     <option value="">Selecione uma área</option>
                     <option value="computacao">Computação</option>
-                    <option value="dados">Análise de Dados</option>
-                    <option value="educacao">Educação</option>
-                    <option value="ps">Processo Seletivo</option>
+                    <option value="dados">Dados</option>
                     <option value="outro">Outro</option>
                   </select>
                 </div>
